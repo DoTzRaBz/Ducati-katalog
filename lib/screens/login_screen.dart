@@ -26,10 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
           image: DecorationImage(
             image: AssetImage('assets/Ducati_wallpaper.png'),
             fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(
-              Colors.black45, 
-              BlendMode.darken,
-            ),
+            colorFilter: ColorFilter.mode(Colors.black45, BlendMode.darken),
           ),
         ),
         child: Center(
@@ -40,12 +37,16 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 Text(
                   'Welcome Back',
-                  style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: Colors.white),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.headlineLarge?.copyWith(color: Colors.white),
                 ),
                 const SizedBox(height: 16),
                 Text(
                   'Login to your account',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.white70),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleMedium?.copyWith(color: Colors.white70),
                 ),
                 const SizedBox(height: 48),
                 TextField(
@@ -84,7 +85,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 32),
                 _isLoading
-                    ? const CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.white)) 
+                    ? const CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      )
                     : ElevatedButton(
                         onPressed: () async {
                           setState(() => _isLoading = true);
@@ -94,10 +97,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           );
                           if (mounted) {
                             if (success) {
-                              GoRouter.of(context).go('/');
+                              context.go('/');
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Invalid email or password.')),
+                                const SnackBar(
+                                  content: Text('Invalid email or password.'),
+                                ),
                               );
                             }
                             setState(() => _isLoading = false);
@@ -108,9 +113,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 16),
                 TextButton(
                   onPressed: () {
-                    GoRouter.of(context).go('/register');
+                    context.go('/register');
                   },
-                  child: const Text('Don\'t have an account? Register', style: TextStyle(color: Colors.white70)),
+                  child: const Text(
+                    'Don\'t have an account? Register',
+                    style: TextStyle(color: Colors.white70),
+                  ),
                 ),
               ],
             ),

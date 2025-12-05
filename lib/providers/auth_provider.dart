@@ -1,65 +1,104 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
-import '../helpers/database_helper.dart';
-import '../models/user_model.dart';
+class User {
+  final String name;
+  final String email;
+  String? profilePicture;
+
+  User({required this.name, required this.email, this.profilePicture});
+}
 
 class AuthProvider with ChangeNotifier {
-  final DatabaseHelper _db = DatabaseHelper();
+  final SharedPreferences prefs;
   User? _currentUser;
+
+  AuthProvider(this.prefs) {
+    _loadUser();
+  }
 
   User? get currentUser => _currentUser;
 
+  bool get isLoggedIn => _currentUser != null;
+
+  void _loadUser() {
+    final name = prefs.getString('userName');
+    final email = prefs.getString('userEmail');
+    final profilePicture = prefs.getString('userProfilePicture');
+
+    if (name != null && email != null) {
+      _currentUser = User(
+        name: name,
+        email: email,
+        profilePicture: profilePicture,
+      );
+    }
+  }
+
+  Future<void> _saveUser() async {
+    if (_currentUser != null) {
+      await prefs.setString('userName', _currentUser!.name);
+      await prefs.setString('userEmail', _currentUser!.email);
+      if (_currentUser!.profilePicture != null) {
+        await prefs.setString(
+          'userProfilePicture',
+          _currentUser!.profilePicture!,
+        );
+      }
+    }
+  }
+
   Future<bool> login(String email, String password) async {
-    User? user = await _db.getUser(email, password);
-    if (user != null) {
-      _currentUser = user;
+    // In a real app, you would have proper authentication logic here.
+    if (email.isNotEmpty && password.isNotEmpty) {
+      _currentUser = User(name: 'User', email: email);
+      await _saveUser();
       notifyListeners();
       return true;
     }
     return false;
   }
 
-  Future<bool> register(String name, String email, String password) async {
-    // Check if user already exists
-    // Note: A more robust implementation would query the DB for the email
-    User newUser = User(
-      name: name,
-      email: email,
-      password: password,
-      profilePicture: 'assets/Ducati_red_logo.png', // Default picture
-    );
-    int id = await _db.saveUser(newUser);
-    if (id > 0) {
-      _currentUser = newUser.copyWith(id: id);
-      notifyListeners();
-      return true;
-    }
-    return false;
-  }
-
-  void logout() {
+  Future<void> logout() async {
     _currentUser = null;
+    await prefs.remove('userName');
+    await prefs.remove('userEmail');
+    await prefs.remove('userProfilePicture');
     notifyListeners();
   }
 
-  Future<void> updateUser(String newName) async {
-    if (_currentUser != null) {
-      _currentUser = _currentUser!.copyWith(name: newName);
-      await _db.updateUser(_currentUser!);
+  Future<bool> register(String name, String email, String password) async {
+    // In a real app, you would have proper registration logic here.
+    if (name.isNotEmpty && email.isNotEmpty && password.isNotEmpty) {
+      _currentUser = User(name: name, email: email);
+      await _saveUser();
       notifyListeners();
+      return true;
     }
+    return false;
   }
 
   Future<void> updateProfilePicture() async {
-    if (_currentUser == null) return;
-
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
-      _currentUser = _currentUser!.copyWith(profilePicture: pickedFile.path);
-      await _db.updateUser(_currentUser!);
+      _currentUser?.profilePicture = pickedFile.path;
+      await _saveUser();
+      notifyListeners();
+    }
+  }
+
+  void updateUser(String name) {
+    if (_currentUser != null) {
+      _currentUser = User(
+        name: name,
+        email: _currentUser!.email,
+        profilePicture: _currentUser!.profilePicture,
+      );
+      _saveUser();
       notifyListeners();
     }
   }

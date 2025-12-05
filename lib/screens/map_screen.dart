@@ -10,7 +10,12 @@ class Dealer {
   final LatLng location;
   final String image;
 
-  Dealer({required this.name, required this.address, required this.location, required this.image});
+  Dealer({
+    required this.name,
+    required this.address,
+    required this.location,
+    required this.image,
+  });
 }
 
 class MapScreen extends StatelessWidget {
@@ -19,10 +24,30 @@ class MapScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<Dealer> dealers = [
-      Dealer(name: 'Ducati Owners Club Indonesia', address: 'Jakarta', location: LatLng(-6.2579339, 106.8083542), image: 'assets/Ducati_owners_club_indonesia.jpg'),
-      Dealer(name: 'Seimos Moto', address: 'Bandung', location: LatLng(-6.9442687, 107.6082381), image: 'assets/seimos_moto.jpeg'),
-      Dealer(name: 'Ducati Malang', address: 'Malang', location: LatLng(-7.9707906, 112.6007646), image: 'assets/Ducati_malang.jpg'),
-      Dealer(name: 'RS Moto Yogyakarta', address: 'Yogyakarta', location: LatLng(-7.7834863, 110.4040868), image: 'assets/rs_moto_yogjakarta.jpg'),
+      Dealer(
+        name: 'Ducati Owners Club Indonesia',
+        address: 'Jakarta',
+        location: LatLng(-6.2579339, 106.8083542),
+        image: 'assets/Ducati_owners_club_indonesia.jpg',
+      ),
+      Dealer(
+        name: 'Seimos Moto',
+        address: 'Bandung',
+        location: LatLng(-6.9442687, 107.6082381),
+        image: 'assets/seimos_moto.jpeg',
+      ),
+      Dealer(
+        name: 'Ducati Malang',
+        address: 'Malang',
+        location: LatLng(-7.9707906, 112.6007646),
+        image: 'assets/Ducati_malang.jpg',
+      ),
+      Dealer(
+        name: 'RS Moto Yogyakarta',
+        address: 'Yogyakarta',
+        location: LatLng(-7.7834863, 110.4040868),
+        image: 'assets/rs_moto_yogjakarta.jpg',
+      ),
     ];
 
     final List<Marker> markers = dealers.map((dealer) {
@@ -35,9 +60,7 @@ class MapScreen extends StatelessWidget {
     }).toList();
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Ducati Dealers Indonesia'),
-      ),
+      appBar: AppBar(title: const Text('Ducati Dealers Indonesia')),
       drawer: const DrawerNavigation(), // Add the drawer here
       body: PopupScope(
         child: FlutterMap(
@@ -55,7 +78,9 @@ class MapScreen extends StatelessWidget {
                 markers: markers,
                 popupDisplayOptions: PopupDisplayOptions(
                   builder: (BuildContext context, Marker marker) {
-                    final dealer = dealers.firstWhere((d) => d.location == marker.point);
+                    final dealer = dealers.firstWhere(
+                      (d) => d.location == marker.point,
+                    );
                     return Card(
                       child: Padding(
                         padding: const EdgeInsets.all(12.0),
@@ -71,7 +96,12 @@ class MapScreen extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 8),
-                            Text(dealer.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+                            Text(
+                              dealer.name,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                             Text(dealer.address),
                           ],
                         ),

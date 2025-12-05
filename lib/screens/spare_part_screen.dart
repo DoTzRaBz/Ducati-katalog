@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/spare_part_model.dart';
 import '../providers/spare_part_provider.dart';
-import '../providers/cart_provider.dart';
+import '../providers/spare_part_cart_provider.dart';
 import '../widgets/drawer_navigation.dart';
 
 class SparePartScreen extends StatelessWidget {
@@ -391,7 +391,8 @@ class CatalogScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPartCard(BuildContext context, dynamic part, SparePartProvider provider, int index) {
+  Widget _buildPartCard(BuildContext context, part, SparePartProvider provider, int index) {
+    final catalog = provider.catalogs[provider.selectedCatalogIndex];
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 8.0),
       elevation: 1,
@@ -518,6 +519,9 @@ class CatalogScreen extends StatelessWidget {
                         icon: const Icon(Icons.add_shopping_cart, color: Colors.white),
                         onPressed: part.quantity > 0
                             ? () {
+                                final cart = Provider.of<SparePartCartProvider>(context, listen: false);
+                                cart.addToCart(part.partNumber, part.name, part.price, catalog.image, part.quantity);
+
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(

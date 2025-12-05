@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/cart_provider.dart';
+import '../providers/spare_part_cart_provider.dart';
 import '../widgets/drawer_navigation.dart';
 import 'checkout_screen.dart';
 
-class CartScreen extends StatelessWidget {
-  const CartScreen({super.key});
+class SparePartCartScreen extends StatelessWidget {
+  const SparePartCartScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final cartProvider = Provider.of<CartProvider>(context);
+    final cartProvider = Provider.of<SparePartCartProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Shopping Cart'),
+        title: const Text('Spare Part Cart'),
         backgroundColor: Colors.red,
       ),
       drawer: const DrawerNavigation(),
       body: cartProvider.items.isEmpty
           ? const Center(
               child: Text(
-                'Your cart is empty.',
+                'Your spare part cart is empty.',
                 style: TextStyle(fontSize: 18, color: Colors.grey),
               ),
             )
@@ -69,6 +69,7 @@ class CartScreen extends StatelessWidget {
                                       cartItem.name,
                                       cartItem.price,
                                       cartItem.image,
+                                      1, // Add quantity argument
                                     );
                                   },
                                 ),
@@ -119,7 +120,7 @@ class CartScreen extends StatelessWidget {
                        Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const CheckoutScreen(checkoutType: 'product'),
+                          builder: (context) => const CheckoutScreen(checkoutType: 'spare_part'),
                         ),
                       );
                     },

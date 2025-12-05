@@ -1,4 +1,3 @@
-
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -33,7 +32,10 @@ class DatabaseHelper {
     return await db.insert('users', row);
   }
 
-  Future<Map<String, dynamic>?> getUser(String username, String password) async {
+  Future<Map<String, dynamic>?> getUser(
+    String username,
+    String password,
+  ) async {
     Database db = await database;
     List<Map<String, dynamic>> result = await db.query(
       'users',

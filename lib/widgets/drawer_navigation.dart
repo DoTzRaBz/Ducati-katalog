@@ -5,7 +5,9 @@ import 'dart:io';
 
 import '../providers/auth_provider.dart';
 import '../providers/cart_provider.dart';
+import '../providers/spare_part_cart_provider.dart';
 import '../providers/favorites_provider.dart';
+import '../screens/transaction_history_screen.dart'; // Import the new screen
 
 class DrawerNavigation extends StatelessWidget {
   const DrawerNavigation({super.key});
@@ -15,8 +17,10 @@ class DrawerNavigation extends StatelessWidget {
     final authProvider = Provider.of<AuthProvider>(context);
     final user = authProvider.currentUser;
     final cartProvider = Provider.of<CartProvider>(context);
+    final sparePartCartProvider = Provider.of<SparePartCartProvider>(context);
     final favoritesProvider = Provider.of<FavoritesProvider>(context);
-    final cartCount = cartProvider.itemCount;
+    final cartCount = cartProvider.items.length;
+    final sparePartCartCount = sparePartCartProvider.items.length;
     final favoritesCount = favoritesProvider.favoriteProductIds.length;
 
     ImageProvider<Object> backgroundImage;
@@ -42,9 +46,7 @@ class DrawerNavigation extends StatelessWidget {
               currentAccountPicture: CircleAvatar(
                 backgroundImage: backgroundImage,
               ),
-              decoration: BoxDecoration(
-                color: Colors.red[900],
-              ),
+              decoration: BoxDecoration(color: Colors.red[900]),
             ),
             ListTile(
               leading: const Icon(Icons.home, color: Colors.white),
@@ -52,39 +54,105 @@ class DrawerNavigation extends StatelessWidget {
               onTap: () => context.go('/'), // Navigate to Home
             ),
             ListTile(
-              leading: const Icon(Icons.build, color: Colors.white), // Added icon for Spare Parts
-              title: const Text('Spare Parts', style: TextStyle(color: Colors.white)),
-              onTap: () => context.go('/spare-parts'), // Navigate to Spare Parts
+              leading: const Icon(
+                Icons.build,
+                color: Colors.white,
+              ), // Added icon for Spare Parts
+              title: const Text(
+                'Spare Parts',
+                style: TextStyle(color: Colors.white),
+              ),
+              onTap: () =>
+                  context.go('/spare-parts'), // Navigate to Spare Parts
             ),
             ListTile(
               leading: const Icon(Icons.favorite, color: Colors.white),
-              title: const Text('Favorites', style: TextStyle(color: Colors.white)),
+              title: const Text(
+                'Favorites',
+                style: TextStyle(color: Colors.white),
+              ),
               trailing: favoritesCount > 0
                   ? CircleAvatar(
                       radius: 12,
                       backgroundColor: Colors.red,
-                      child: Text(favoritesCount.toString(),
-                          style: const TextStyle(color: Colors.white, fontSize: 12)),
+                      child: Text(
+                        favoritesCount.toString(),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                        ),
+                      ),
                     )
                   : null,
               onTap: () => context.go('/favorites'), // Navigate to Favorites
             ),
             ListTile(
               leading: const Icon(Icons.shopping_cart, color: Colors.white),
-              title: const Text('Cart', style: TextStyle(color: Colors.white)),
+              title: const Text(
+                'Motorcycle Cart',
+                style: TextStyle(color: Colors.white),
+              ),
               trailing: cartCount > 0
                   ? CircleAvatar(
                       radius: 12,
                       backgroundColor: Colors.red,
-                      child: Text(cartCount.toString(),
-                          style: const TextStyle(color: Colors.white, fontSize: 12)),
+                      child: Text(
+                        cartCount.toString(),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                        ),
+                      ),
                     )
                   : null,
               onTap: () => context.go('/cart'), // Navigate to Cart
             ),
             ListTile(
+              leading: const Icon(
+                Icons.settings_input_component,
+                color: Colors.white,
+              ),
+              title: const Text(
+                'Spare Part Cart',
+                style: TextStyle(color: Colors.white),
+              ),
+              trailing: sparePartCartCount > 0
+                  ? CircleAvatar(
+                      radius: 12,
+                      backgroundColor: Colors.red,
+                      child: Text(
+                        sparePartCartCount.toString(),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                        ),
+                      ),
+                    )
+                  : null,
+              onTap: () =>
+                  context.go('/spare-part-cart'), // Navigate to Spare Part Cart
+            ),
+            ListTile(
+              leading: const Icon(Icons.history, color: Colors.white),
+              title: const Text(
+                'Transaction History',
+                style: TextStyle(color: Colors.white),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const TransactionHistoryScreen(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
               leading: const Icon(Icons.map, color: Colors.white),
-              title: const Text('Dealer Map', style: TextStyle(color: Colors.white)),
+              title: const Text(
+                'Dealer Map',
+                style: TextStyle(color: Colors.white),
+              ),
               onTap: () => context.go('/map'), // Navigate to Map
             ),
             ListTile(
@@ -95,12 +163,18 @@ class DrawerNavigation extends StatelessWidget {
             const Divider(color: Colors.white24),
             ListTile(
               leading: const Icon(Icons.person, color: Colors.white),
-              title: const Text('Profile', style: TextStyle(color: Colors.white)),
+              title: const Text(
+                'Profile',
+                style: TextStyle(color: Colors.white),
+              ),
               onTap: () => context.go('/profile'), // Navigate to Profile
             ),
             ListTile(
               leading: const Icon(Icons.logout, color: Colors.white),
-              title: const Text('Logout', style: TextStyle(color: Colors.white)),
+              title: const Text(
+                'Logout',
+                style: TextStyle(color: Colors.white),
+              ),
               onTap: () {
                 authProvider.logout();
                 context.go('/login');

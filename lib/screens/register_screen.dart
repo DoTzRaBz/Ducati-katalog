@@ -15,38 +15,40 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
   bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context);
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
     return Scaffold(
-      extendBodyBehindAppBar: true, // Make body extend behind AppBar
-      appBar: AppBar(
-        title: const Text('Create Account', style: TextStyle(color: Colors.white)),
-        backgroundColor: Colors.transparent, // Make AppBar transparent
-        elevation: 0, // No shadow
-        iconTheme: const IconThemeData(color: Colors.white), // White back button
-      ),
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/Ducati_wallpaper.png'),
             fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(
-              Colors.black54, // Darken the image
-              BlendMode.darken,
-            ),
+            colorFilter: ColorFilter.mode(Colors.black45, BlendMode.darken),
           ),
         ),
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(24.0, 96.0, 24.0, 24.0), // Add padding for AppBar
+            padding: const EdgeInsets.all(24.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Text(
+                  'Create Account',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.headlineLarge?.copyWith(color: Colors.white),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'Join the Ducati community',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleMedium?.copyWith(color: Colors.white70),
+                ),
                 const SizedBox(height: 48),
                 TextField(
                   controller: _nameController,
@@ -99,35 +101,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 16),
-                TextField(
-                  controller: _confirmPasswordController,
-                  obscureText: true,
-                  style: const TextStyle(color: Colors.white),
-                  decoration: InputDecoration(
-                    labelText: 'Confirm Password',
-                    labelStyle: const TextStyle(color: Colors.white70),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: Colors.white54),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: Colors.white),
-                    ),
-                  ),
-                ),
                 const SizedBox(height: 32),
                 _isLoading
-                    ? const CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.white))
+                    ? const CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      )
                     : ElevatedButton(
                         onPressed: () async {
-                          if (_passwordController.text != _confirmPasswordController.text) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Passwords do not match.')),
-                            );
-                            return;
-                          }
                           setState(() => _isLoading = true);
                           final success = await authProvider.register(
                             _nameController.text,
@@ -136,10 +116,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           );
                           if (mounted) {
                             if (success) {
-                              GoRouter.of(context).go('/');
+                              context.go('/');
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Failed to register. Email might already be in use.')),
+                                const SnackBar(
+                                  content: Text('Registration failed.'),
+                                ),
                               );
                             }
                             setState(() => _isLoading = false);
@@ -150,9 +132,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(height: 16),
                 TextButton(
                   onPressed: () {
-                    GoRouter.of(context).go('/login');
+                    context.go('/login');
                   },
-                  child: const Text('Already have an account? Login', style: TextStyle(color: Colors.white70)),
+                  child: const Text(
+                    'Already have an account? Login',
+                    style: TextStyle(color: Colors.white70),
+                  ),
                 ),
               ],
             ),

@@ -16,7 +16,7 @@ class CartItem {
   });
 }
 
-class CartProvider with ChangeNotifier {
+class SparePartCartProvider with ChangeNotifier {
   final Map<String, CartItem> _items = {};
 
   Map<String, CartItem> get items => _items;
@@ -31,7 +31,7 @@ class CartProvider with ChangeNotifier {
     return total;
   }
 
-  void addToCart(String productId, String name, double price, String image) {
+  void addToCart(String productId, String name, double price, String image, int quantity) {
     if (_items.containsKey(productId)) {
       _items.update(
         productId,
@@ -40,13 +40,13 @@ class CartProvider with ChangeNotifier {
           name: existingCartItem.name,
           price: existingCartItem.price,
           image: existingCartItem.image,
-          quantity: existingCartItem.quantity + 1,
+          quantity: existingCartItem.quantity + quantity,
         ),
       );
     } else {
       _items.putIfAbsent(
         productId,
-        () => CartItem(id: productId, name: name, price: price, image: image),
+        () => CartItem(id: productId, name: name, price: price, image: image, quantity: quantity),
       );
     }
     notifyListeners();

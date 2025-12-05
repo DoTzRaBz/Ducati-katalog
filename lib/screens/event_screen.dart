@@ -1,8 +1,9 @@
-
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+
+import '../widgets/drawer_navigation.dart';
 
 class EventScreen extends StatelessWidget {
   const EventScreen({super.key});
@@ -14,13 +15,11 @@ class EventScreen extends StatelessWidget {
         title: const Text('Ducati Events'),
         backgroundColor: Colors.red[900],
       ),
+      drawer: const DrawerNavigation(),
       body: Container(
         color: Colors.black,
         child: ListView(
-          children: const [
-            HypermotardEventCard(),
-            WdwEventCard(),
-          ],
+          children: const [HypermotardEventCard(), WdwEventCard()],
         ),
       ),
     );
@@ -34,17 +33,15 @@ class HypermotardEventCard extends StatefulWidget {
   State<HypermotardEventCard> createState() => _HypermotardEventCardState();
 }
 
-class _HypermotardEventCardState extends State<HypermotardEventCard> with SingleTickerProviderStateMixin {
+class _HypermotardEventCardState extends State<HypermotardEventCard>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
   bool _showVideo = false;
 
   final YoutubePlayerController _youtubeController = YoutubePlayerController(
     initialVideoId: 'SRf4iF4KqCs',
-    flags: const YoutubePlayerFlags(
-      autoPlay: true,
-      mute: false,
-    ),
+    flags: const YoutubePlayerFlags(autoPlay: true, mute: false),
   );
 
   @override
@@ -54,12 +51,10 @@ class _HypermotardEventCardState extends State<HypermotardEventCard> with Single
       duration: const Duration(seconds: 2),
       vsync: this,
     )..repeat(reverse: true);
-    _animation = Tween<double>(begin: 0.95, end: 1.05).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: Curves.easeInOut,
-      ),
-    );
+    _animation = Tween<double>(
+      begin: 0.95,
+      end: 1.05,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
 
     Timer(const Duration(seconds: 5), () {
       if (mounted) {

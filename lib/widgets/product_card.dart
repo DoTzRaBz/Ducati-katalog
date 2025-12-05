@@ -20,9 +20,7 @@ class ProductCard extends StatelessWidget {
       },
       child: Card(
         elevation: 4,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -43,13 +41,13 @@ class ProductCard extends StatelessWidget {
                 ),
                 IconButton(
                   icon: Icon(
-                    favoritesProvider.isFavorite(product.id)
+                    favoritesProvider.isFavorite(product.id.toString())
                         ? Icons.favorite
                         : Icons.favorite_border,
                     color: Colors.red,
                   ),
                   onPressed: () {
-                    favoritesProvider.toggleFavorite(product.id);
+                    favoritesProvider.toggleFavorite(product);
                   },
                 ),
               ],
@@ -71,10 +69,7 @@ class ProductCard extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     'Rp ${product.price.toStringAsFixed(0)}',
-                    style: TextStyle(
-                      color: Colors.grey[700],
-                      fontSize: 14,
-                    ),
+                    style: TextStyle(color: Colors.grey[700], fontSize: 14),
                   ),
                 ],
               ),

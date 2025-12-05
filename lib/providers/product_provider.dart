@@ -7,9 +7,11 @@ class ProductProvider with ChangeNotifier {
 
   List<Product> get allProducts => _products;
 
-  List<Product> get highlightedProducts => _products.where((p) => p.id <= 2).toList();
+  List<Product> get highlightedProducts =>
+      _products.where((p) => p.id <= 2).toList();
 
-  List<Product> get featuredProducts => _products.where((p) => p.id > 2 && p.id <= 4).toList();
+  List<Product> get featuredProducts =>
+      _products.where((p) => p.id > 2 && p.id <= 4).toList();
 
   List<Product> get newArrivals => _products.where((p) => p.id > 4).toList();
 

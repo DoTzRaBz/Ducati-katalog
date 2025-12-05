@@ -17,9 +17,5 @@ class Catalog {
   final String image;
   final List<SparePart> parts;
 
-  Catalog({
-    required this.name,
-    required this.image,
-    required this.parts,
-  });
+  Catalog({required this.name, required this.image, required this.parts});
 }

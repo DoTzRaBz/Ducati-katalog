@@ -41,9 +41,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('My Profile'),
-      ),
+      appBar: AppBar(title: const Text('My Profile')),
       drawer: const DrawerNavigation(), // Add the drawer here
       body: user == null
           ? const Center(child: Text('You are not logged in.'))
@@ -61,7 +59,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: CircleAvatar(
                           backgroundColor: Colors.red,
                           radius: 18,
-                          child: Icon(Icons.camera_alt, color: Colors.white, size: 20),
+                          child: Icon(
+                            Icons.camera_alt,
+                            color: Colors.white,
+                            size: 20,
+                          ),
                         ),
                       ),
                     ),
@@ -94,7 +96,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       'Logout',
                       style: TextStyle(color: Colors.red, fontSize: 16),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
