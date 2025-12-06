@@ -20,6 +20,18 @@ class _HomeScreenState extends State<HomeScreen> {
   late final Timer _timer;
   int _currentPage = 0;
 
+  // Map of descriptions for each motorcycle
+  final Map<String, String> _productDescriptions = {
+    'Ducati Panigale V4R': 'The ultimate racing machine.',
+    'Ducati Streetfighter V4S': 'The fight formula.',
+    'Ducati Multistrada V4S': 'Rule all roads.',
+    'Ducati Diavel V4': 'Bold and muscular.',
+    'Ducati Scrambler Icon': 'Land of joy.',
+    'Ducati DesertX': 'Explore your wildest dreams.',
+    'Ducati Hypermotard 950': 'Pure fun, pure adrenaline.',
+    'Ducati Monster': 'Just the essentials.',
+  };
+
   @override
   void initState() {
     super.initState();
@@ -106,6 +118,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildFeaturedProduct(BuildContext context, Product product) {
+    // Get the description from the map, or use a default if not found
+    final description = _productDescriptions[product.name] ?? 'Power, Style, and Sophistication.';
+
     return GestureDetector(
       onTap: () => GoRouter.of(context).push('/product/${product.id}'),
       child: Stack(
@@ -146,9 +161,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 const SizedBox(height: 8),
-                const Text(
-                  'Power, Style, and Sophistication.',
-                  style: TextStyle(color: Colors.white70, fontSize: 16),
+                Text(
+                  description, // Use the dynamic description here
+                  style: const TextStyle(color: Colors.white70, fontSize: 16),
                 ),
               ],
             ),

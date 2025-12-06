@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../models/spare_part_model.dart';
 import '../providers/spare_part_provider.dart';
@@ -49,6 +50,20 @@ class SparePartScreen extends StatelessWidget {
             );
           },
         ),
+        actions: [
+          Consumer<SparePartCartProvider>(
+            builder: (context, cart, child) {
+              return Badge(
+                label: Text(cart.itemCount.toString()),
+                isLabelVisible: cart.itemCount > 0,
+                child: IconButton(
+                  icon: const Icon(Icons.shopping_cart),
+                  onPressed: () => context.go('/spare-part-cart'),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: Consumer<SparePartProvider>(
         builder: (context, provider, child) {
@@ -391,7 +406,7 @@ class CatalogScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPartCard(BuildContext context, part, SparePartProvider provider, int index) {
+  Widget _buildPartCard(BuildContext context, SparePart part, SparePartProvider provider, int index) {
     final catalog = provider.catalogs[provider.selectedCatalogIndex];
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 8.0),

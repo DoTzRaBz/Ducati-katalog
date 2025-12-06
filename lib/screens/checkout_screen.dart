@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
+import '../providers/auth_provider.dart';
 import '../providers/cart_provider.dart' as product_cart;
 import '../providers/spare_part_cart_provider.dart' as spare_part_cart;
 import '../providers/transaction_provider.dart';
@@ -46,6 +47,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   void _submitOrder() {
     if (_formKey.currentState!.validate()) {
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      final userEmail = authProvider.currentUser!.email;
+
       final transactionProvider = Provider.of<TransactionProvider>(context, listen: false);
 
       if (widget.checkoutType == 'product') {
@@ -56,7 +60,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           'price': item.price,
           'quantity': item.quantity,
         }).toList();
-        transactionProvider.addTransaction(items, cart.totalAmount, _selectedDealer!);
+        transactionProvider.addTransaction(items, cart.totalAmount, _selectedDealer!, userEmail);
         cart.clearCart();
       } else {
         final sparePartCart = Provider.of<spare_part_cart.SparePartCartProvider>(context, listen: false);
@@ -66,7 +70,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           'price': item.price,
           'quantity': item.quantity,
         }).toList();
-        transactionProvider.addTransaction(items, sparePartCart.totalAmount, _selectedDealer!);
+        transactionProvider.addTransaction(items, sparePartCart.totalAmount, _selectedDealer!, userEmail);
         sparePartCart.clearCart();
       }
 

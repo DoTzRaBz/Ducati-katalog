@@ -15,6 +15,7 @@ import 'screens/event_screen.dart';
 import 'screens/spare_part_screen.dart';
 import 'screens/spare_part_cart_screen.dart';
 import 'screens/transaction_history_screen.dart';
+import 'screens/wdw_screen.dart';
 
 import 'providers/auth_provider.dart';
 import 'providers/product_provider.dart';
@@ -44,7 +45,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => CartProvider()),
         ChangeNotifierProvider(create: (_) => SparePartProvider()),
         ChangeNotifierProvider(create: (_) => SparePartCartProvider()),
-        ChangeNotifierProvider(create: (_) => TransactionProvider()),
+        // Correctly provide the SharedPreferences instance to TransactionProvider
+        ChangeNotifierProvider(create: (_) => TransactionProvider(prefs)),
       ],
       child: Builder(
         builder: (context) {
@@ -108,6 +110,10 @@ class MyApp extends StatelessWidget {
         GoRoute(
           path: '/transaction-history',
           builder: (context, state) => const TransactionHistoryScreen(),
+        ),
+        GoRoute(
+          path: '/wdw',
+          builder: (context, state) => const WdwScreen(),
         ),
       ],
       redirect: (context, state) {
